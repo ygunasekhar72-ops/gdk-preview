@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GDK Case Study — before / after: the same game, ungoverned vs gated</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0d1117; color: #e6edf3; font: 15px/1.55 system-ui, Segoe UI, sans-serif; }
+  header { padding: 42px 24px 10px; max-width: 1240px; margin: 0 auto; }
+  h1 { margin: 0 0 6px; font-size: 30px; letter-spacing: -0.5px; }
+  h1 .gdk { color: #7ee787; }
+  .sub { color: #9aa4b2; max-width: 900px; }
+  .sub b { color: #e6edf3; }
+  .row { display: flex; gap: 20px; padding: 18px 24px; max-width: 1240px; margin: 0 auto; flex-wrap: wrap; }
+  .card { flex: 1 1 560px; border: 1px solid #21262d; border-radius: 12px; overflow: hidden; background: #10151c; }
+  .card h2 { margin: 0; padding: 14px 18px; font-size: 17px; border-bottom: 1px solid #21262d; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .badge { font: 600 11px/1 monospace; padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+  .red { background: #3d1d20; color: #ff7b72; }
+  .green { background: #10352a; color: #7ee787; }
+  .frame-wrap { position: relative; }
+  iframe { width: 100%; height: 560px; border: 0; display: block; background: #000; }
+  .facts { padding: 14px 18px; border-top: 1px solid #21262d; }
+  .facts ul { margin: 8px 0 0; padding-left: 20px; }
+  .facts li { margin: 5px 0; color: #adbac7; }
+  .facts li b { color: #e6edf3; }
+  section { max-width: 1240px; margin: 0 auto; padding: 8px 24px 40px; }
+  h3 { font-size: 19px; margin: 28px 0 10px; }
+  table { border-collapse: collapse; width: 100%; font: 13px/1.5 ui-monospace, Consolas, monospace; }
+  th, td { border: 1px solid #21262d; padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { background: #161b22; color: #9aa4b2; font-weight: 600; }
+  td.p { color: #7ee787; } td.s { color: #d29922; } td.f { color: #ff7b72; }
+  .note { background: #10151c; border: 1px solid #21262d; border-radius: 10px; padding: 14px 18px; color: #adbac7; }
+  .note b { color: #e6edf3; }
+  a { color: #58a6ff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  footer { color: #6e7681; text-align: center; padding: 22px; font-size: 13px; }
+  code { background: #161b22; border: 1px solid #21262d; border-radius: 5px; padding: 1px 6px; font-size: 13px; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="gdk">GDK</span> case study — the same game, built twice</h1>
+  <p class="sub">
+    <b>"Mini GTA" — top-down open-world driving for the browser:</b> walk around a city,
+    steal cars, knock over pedestrians (and get wanted stars for it), shake the police,
+    deliver checkpoints for cash. Built <b>twice by AI coding agents</b>:
+    once <b>without GDK</b> (a normal "just make it work" build), once
+    <b>through the GDK pipeline</b> — declared spec, generated agent team plan, pillar
+    playbooks, and machine-checkable quality gates that <b>reject the build</b> until
+    every rule passes. Both games below are fully playable.
+  </p>
+</header>
+
+<div class="row">
+  <div class="card">
+    <h2>WITHOUT GDK <span class="badge red">0 gates · 0 tests · unverified</span></h2>
+    <div class="frame-wrap"><iframe src="baseline/" title="baseline build"></iframe></div>
+    <div class="facts">
+      <ul>
+        <li><b>Shape:</b> one 1,041-line <code>game.js</code> + <code>index.html</code>. No spec, no tests, no build, no structure.</li>
+        <li><b>Timing:</b> gameplay integrated with variable-delta <code>requestAnimationFrame</code> — behavior changes with frame rate.</li>
+        <li><b>Verification:</b> syntax check only. Nobody can prove the physics, the FSM (if any), or the game loop actually work — you just… play it and hope.</li>
+        <li><b>Authority:</b> no simulation/render separation to audit; logic and drawing are interleaved.</li>
+        <li><b>Works today.</b> Honest point: ungoverned agents still ship playable games. GDK's value starts the moment you need <b>proof</b>, maintenance, or multiplayer.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>BUILT WITH GDK <span class="badge green">gate report: PASS · 7/7 headless tests</span></h2>
+    <div class="frame-wrap"><iframe src="gdk/" title="GDK build"></iframe></div>
+    <div class="facts">
+      <ul>
+        <li><b>Shape:</b> declared <code>gdk.game.json</code> spec → planner output (5 phases, 5 specialists) → per-phase gate runs kept as the audit trail.</li>
+        <li><b>Timing:</b> deterministic 60 Hz fixed-timestep sim, render decoupled. Same seed + same inputs = identical world, proven byte-for-byte over 600 ticks.</li>
+        <li><b>Verification:</b> 7-test headless suite (determinism, input clamp, collision, FSM legality, crime events, scripted playtest) — <code>GDK:ALL-TESTS-PASS</code>.</li>
+        <li><b>Authority:</b> <code>GDK:AUTHORITATIVE</code> sim boundary is grep-enforced; renderer reads, never decides.</li>
+        <li><b>Ready to grow:</b> the same discipline is what server-authoritative multiplayer requires — see the <a href="https://github.com/ygunasekhar72-ops/gdk" target="_blank">multiplayer arena template</a>.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<section>
+  <h3>The GDK gate report on the rebuild (final acceptance run)</h3>
+  <table>
+    <tr><th style="width:130px">status</th><th style="width:230px">rule</th><th>evidence</th></tr>
+    <tr><td class="p">PASS</td><td>PHY.FIXED-TIMESTEP</td><td>fixed tick constants evidenced in sim source</td></tr>
+    <tr><td class="p">PASS</td><td>PHY.DETERMINISM (runtime)</td><td><code>GDK:OK determinism: 600 seeded ticks, two runs exactly identical</code></td></tr>
+    <tr><td class="p">PASS</td><td>PHY.SANITY-SIM (runtime)</td><td><code>GDK:OK clamp: sustained max input caps at 14.000 &lt;= 14</code></td></tr>
+    <tr><td class="p">PASS</td><td>LOG.FSM</td><td>explicit GameState table + single transition function evidenced</td></tr>
+    <tr><td class="p">PASS</td><td>LOG.SIM-RENDER-SEPARATION</td><td>zero browser/render APIs inside sim modules</td></tr>
+    <tr><td class="p">PASS</td><td>LOG.EVENTS-DETERMINISTIC</td><td>tick-stamped events (integer tick on every event)</td></tr>
+    <tr><td class="p">PASS</td><td>SEC.NEVER-TRUST-CLIENT</td><td>score/wanted mutate only inside the GDK:AUTHORITATIVE sim</td></tr>
+    <tr><td class="p">PASS</td><td>SEC.SECRETS-SCAN</td><td>no credential-shaped strings anywhere in the tree</td></tr>
+    <tr><td class="p">PASS</td><td>GFX.FPS-BUDGET / GFX.RENDER-SCALE</td><td>rAF loop + explicit DPR-aware canvas sizing</td></tr>
+    <tr><td class="p">PASS</td><td>QA.TESTS-PASS (runtime)</td><td>node headless suite green; <code>GDK:ALL-TESTS-PASS</code></td></tr>
+    <tr><td class="p">PASS</td><td>QA.PLAYTEST-SCRIPT (runtime)</td><td><code>GDK:OK playtest: full loop delivered at tick 6657, score 500</code></td></tr>
+    <tr><td class="s">SKIP (honest)</td><td>NET.* · SEC.RATE-LIMIT/SANITIZE/TRANSPORT</td><td>marked N/A by the spec — single-player build, never silently upgraded to passes</td></tr>
+  </table>
+
+  <h3>What the gates actually caught during the rebuild</h3>
+  <div class="note">
+    <b>Real defects, caught by gates, fixed in the game (not in the gates):</b>
+    <ul>
+      <li><b>Wall-glue physics</b> — collision response made cars grind along walls at 0.07 m/s; the scripted-playtest gate exposed it → fixed with tangent sliding.</li>
+      <li><b>Dead missions after a bust</b> — a BUSTED respawn stranded the FSM in FREE_ROAM so the mission could never complete → fixed (mission persists through arrest).</li>
+      <li><b>Two test bugs</b> — an FSM case that asserted a <i>legal</i> transition must be rejected, and a bot chasing uncatchable moving cars → tests fixed, gates untouched.</li>
+    </ul>
+    <b>Honest comparison:</b> the ungoverned build also plays fine today. GDK doesn't make the first playable build appear — it makes the build <b>provable, auditable, and safely extendable</b> (multiplayer, replays, team handoffs). That is the gap it exists to close.
+  </div>
+
+  <h3>Source</h3>
+  <p>
+    Baseline: <a href="https://github.com/ygunasekhar72-ops/gdk-preview/tree/main/baseline" target="_blank">/baseline</a>
+    · GDK build: <a href="https://github.com/ygunasekhar72-ops/gdk-preview/tree/main/gdk" target="_blank">/gdk</a> (incl. <code>gate-reports/</code>)
+    · The kit itself: <a href="https://github.com/ygunasekhar72-ops/gdk" target="_blank">github.com/ygunasekhar72-ops/gdk</a>
+  </p>
+</section>
+
+<footer>GDK — Game Development Kit for AI agents · preview generated 2026-11-12 · both builds by AI agents, verified as described above</footer>
+</body>
+</html>

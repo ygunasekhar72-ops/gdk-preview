@@ -1,0 +1,236 @@
+{
+  "project": "gdk-gta-web",
+  "engine": "web",
+  "ranAt": "2026-11-12T17:54:42.936Z",
+  "results": [
+    {
+      "ruleId": "NET.SRV-AUTH",
+      "status": "skipped",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "NET.TICK-FIXED",
+      "status": "skipped",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "NET.INPUT-VALIDATE",
+      "status": "skipped",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "NET.SNAPSHOT-INTERP",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "NET.PREDICT-RECONCILE",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "NET.LAGCOMP",
+      "status": "skipped",
+      "severity": "advisory",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "PHY.FIXED-TIMESTEP",
+      "status": "fail",
+      "severity": "blocker",
+      "evidence": [
+        "REQUIRED missing → A fixed simulation tick constant must exist in the sim source (no variable-delta gameplay integration)."
+      ],
+      "message": "REQUIRED missing → A fixed simulation tick constant must exist in the sim source (no variable-delta gameplay integration)."
+    },
+    {
+      "ruleId": "PHY.UNIT-CONSIST",
+      "status": "pass",
+      "severity": "major",
+      "evidence": [],
+      "message": "units convention inherited from GDK default (m, s, kg) — declare overrides in spec"
+    },
+    {
+      "ruleId": "LOG.FSM",
+      "status": "fail",
+      "severity": "blocker",
+      "evidence": [
+        "REQUIRED missing → A GameState enum/const set (or equivalent named states) is required.",
+        "REQUIRED missing → A single transition function/table (or switch on state) is required."
+      ],
+      "message": "REQUIRED missing → A GameState enum/const set (or equivalent named states) is required. | REQUIRED missing → A single transition function/table (or switch on state) is required."
+    },
+    {
+      "ruleId": "LOG.SIM-RENDER-SEPARATION",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "static check ok (0 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "LOG.EVENTS-DETERMINISTIC",
+      "status": "fail",
+      "severity": "major",
+      "evidence": [
+        "REQUIRED missing → Tick-stamped event handling required (no frame-timer gameplay logic)."
+      ],
+      "message": "REQUIRED missing → Tick-stamped event handling required (no frame-timer gameplay logic)."
+    },
+    {
+      "ruleId": "LOG.SAVE-SAFE",
+      "status": "pass",
+      "severity": "advisory",
+      "evidence": [],
+      "message": "Sim state serializable (replay/rollback-ready): advisory/policy — enforce during hardening phase, gate reports it for the record"
+    },
+    {
+      "ruleId": "SEC.NEVER-TRUST-CLIENT",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "static check ok (0 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "SEC.SECRETS-SCAN",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "static check ok (0 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "SEC.RATE-LIMIT",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "security rule N/A: no networked clients in this spec"
+    },
+    {
+      "ruleId": "SEC.SANITIZE",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "security rule N/A: no networked clients in this spec"
+    },
+    {
+      "ruleId": "SEC.TRANSPORT",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "security rule N/A: no networked clients in this spec"
+    },
+    {
+      "ruleId": "GFX.FPS-BUDGET",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [
+        "index.html: /requestAnimationFrame|setTargetFps|FPS|frameBudget/i"
+      ],
+      "message": "static check ok (1 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "GFX.RENDER-SCALE",
+      "status": "fail",
+      "severity": "major",
+      "evidence": [
+        "REQUIRED missing → Canvas/viewport sizing must be explicit (declared quality, not defaults-by-accident)."
+      ],
+      "message": "REQUIRED missing → Canvas/viewport sizing must be explicit (declared quality, not defaults-by-accident)."
+    },
+    {
+      "ruleId": "GFX.ASSET-BUDGET",
+      "status": "pass",
+      "severity": "major",
+      "evidence": [],
+      "message": "Asset budgets declared and respected: advisory/policy — enforce during hardening phase, gate reports it for the record"
+    },
+    {
+      "ruleId": "GFX.LOD-DRAWCALL",
+      "status": "pass",
+      "severity": "advisory",
+      "evidence": [],
+      "message": "Draw-call and LOD discipline: advisory/policy — enforce during hardening phase, gate reports it for the record"
+    },
+    {
+      "ruleId": "QA.TESTS-PRESENT",
+      "status": "fail",
+      "severity": "blocker",
+      "evidence": [
+        "REQUIRED missing → tests/ must contain a GDK-marked headless test script."
+      ],
+      "message": "REQUIRED missing → tests/ must contain a GDK-marked headless test script."
+    },
+    {
+      "ruleId": "QA.SPEC-COMPLETE",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [
+        "gdk.game.json"
+      ],
+      "message": "gdk.game.json present and valid"
+    },
+    {
+      "ruleId": "PHY.DETERMINISM",
+      "status": "skipped",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "no tests/ directory in project"
+    },
+    {
+      "ruleId": "PHY.SANITY-SIM",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "no tests/ directory in project"
+    },
+    {
+      "ruleId": "QA.TESTS-PASS",
+      "status": "skipped",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "no tests/ directory in project"
+    },
+    {
+      "ruleId": "QA.PLAYTEST-SCRIPT",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "no tests/ directory in project"
+    }
+  ],
+  "passed": false,
+  "blockersFailed": [
+    "PHY.FIXED-TIMESTEP",
+    "LOG.FSM",
+    "QA.TESTS-PRESENT"
+  ],
+  "majorsFailed": [
+    "LOG.EVENTS-DETERMINISTIC",
+    "GFX.RENDER-SCALE"
+  ],
+  "skipped": [
+    "NET.SRV-AUTH",
+    "NET.TICK-FIXED",
+    "NET.INPUT-VALIDATE",
+    "NET.SNAPSHOT-INTERP",
+    "NET.PREDICT-RECONCILE",
+    "NET.LAGCOMP",
+    "SEC.RATE-LIMIT",
+    "SEC.SANITIZE",
+    "SEC.TRANSPORT",
+    "PHY.DETERMINISM",
+    "PHY.SANITY-SIM",
+    "QA.TESTS-PASS",
+    "QA.PLAYTEST-SCRIPT"
+  ]
+}

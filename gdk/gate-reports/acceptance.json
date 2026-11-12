@@ -1,0 +1,253 @@
+{
+  "project": "gdk-gta-web",
+  "engine": "web",
+  "ranAt": "2026-11-12T18:12:46.602Z",
+  "results": [
+    {
+      "ruleId": "NET.SRV-AUTH",
+      "status": "skipped",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "NET.TICK-FIXED",
+      "status": "skipped",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "NET.INPUT-VALIDATE",
+      "status": "skipped",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "NET.SNAPSHOT-INTERP",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "NET.PREDICT-RECONCILE",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "NET.LAGCOMP",
+      "status": "skipped",
+      "severity": "advisory",
+      "evidence": [],
+      "message": "netcode rule N/A: spec.multiplayer.enabled is false"
+    },
+    {
+      "ruleId": "PHY.FIXED-TIMESTEP",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [
+        "src/main.ts: /FIXED_TICK|TICK_RATE|1\\s*\\/\\s*60|fixedDt|STEP_MS/"
+      ],
+      "message": "static check ok (1 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "PHY.UNIT-CONSIST",
+      "status": "pass",
+      "severity": "major",
+      "evidence": [],
+      "message": "units convention inherited from GDK default (m, s, kg) — declare overrides in spec"
+    },
+    {
+      "ruleId": "LOG.FSM",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [
+        "src/game/game_state.ts: /enum\\s+GameState|const\\s+GameState\\s*=|class\\s+GameState/",
+        "src/game/game_state.ts: /can_transition|canTransition|transitionTo|transition\\(|switch\\s*\\(\\s*[\\w.]*state/i"
+      ],
+      "message": "static check ok (2 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "LOG.SIM-RENDER-SEPARATION",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "static check ok (0 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "LOG.EVENTS-DETERMINISTIC",
+      "status": "pass",
+      "severity": "major",
+      "evidence": [
+        "src/game/game_state.ts: /tick/"
+      ],
+      "message": "static check ok (1 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "LOG.SAVE-SAFE",
+      "status": "pass",
+      "severity": "advisory",
+      "evidence": [],
+      "message": "Sim state serializable (replay/rollback-ready): advisory/policy — enforce during hardening phase, gate reports it for the record"
+    },
+    {
+      "ruleId": "SEC.NEVER-TRUST-CLIENT",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "static check ok (0 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "SEC.SECRETS-SCAN",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [],
+      "message": "static check ok (0 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "SEC.RATE-LIMIT",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "security rule N/A: no networked clients in this spec"
+    },
+    {
+      "ruleId": "SEC.SANITIZE",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "security rule N/A: no networked clients in this spec"
+    },
+    {
+      "ruleId": "SEC.TRANSPORT",
+      "status": "skipped",
+      "severity": "major",
+      "evidence": [],
+      "message": "security rule N/A: no networked clients in this spec"
+    },
+    {
+      "ruleId": "GFX.FPS-BUDGET",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [
+        "index.html: /requestAnimationFrame|setTargetFps|FPS|frameBudget/i"
+      ],
+      "message": "static check ok (1 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "GFX.RENDER-SCALE",
+      "status": "pass",
+      "severity": "major",
+      "evidence": [
+        "src/main.ts: /devicePixelRatio|canvas\\.width|setCanvasSize|resize|VIEW_W|VIEW_H|viewWidth/i"
+      ],
+      "message": "static check ok (1 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "GFX.ASSET-BUDGET",
+      "status": "pass",
+      "severity": "major",
+      "evidence": [],
+      "message": "Asset budgets declared and respected: advisory/policy — enforce during hardening phase, gate reports it for the record"
+    },
+    {
+      "ruleId": "GFX.LOD-DRAWCALL",
+      "status": "pass",
+      "severity": "advisory",
+      "evidence": [],
+      "message": "Draw-call and LOD discipline: advisory/policy — enforce during hardening phase, gate reports it for the record"
+    },
+    {
+      "ruleId": "QA.TESTS-PRESENT",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [
+        "tests/gdk_sim.test.ts: /GDK:TEST/"
+      ],
+      "message": "static check ok (1 required pattern(s) evidenced)"
+    },
+    {
+      "ruleId": "QA.SPEC-COMPLETE",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [
+        "gdk.game.json"
+      ],
+      "message": "gdk.game.json present and valid"
+    },
+    {
+      "ruleId": "PHY.DETERMINISM",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [
+        "GDK:OK determinism: 600 seeded ticks, two runs exactly identical (PHY.DETERMINISM)",
+        "GDK:OK clamp: sustained max input caps at 14.000 <= 14 (PHY.SANITY-SIM)",
+        "GDK:OK collision: 900 ticks of reckless driving, no building tunneling",
+        "GDK:OK fsm: legality table + runtime rejection verified (LOG.FSM)",
+        "GDK:OK crime: wanted 0 -> 1, tick-stamped events (LOG.EVENTS-DETERMINISTIC)",
+        "GDK:OK playtest: full loop delivered at tick 6657, score 500 (QA.PLAYTEST-SCRIPT)"
+      ],
+      "message": "headless node suite green (determinism, sanity, FSM, playtest)"
+    },
+    {
+      "ruleId": "PHY.SANITY-SIM",
+      "status": "pass",
+      "severity": "major",
+      "evidence": [
+        "GDK:OK determinism: 600 seeded ticks, two runs exactly identical (PHY.DETERMINISM)",
+        "GDK:OK clamp: sustained max input caps at 14.000 <= 14 (PHY.SANITY-SIM)",
+        "GDK:OK collision: 900 ticks of reckless driving, no building tunneling",
+        "GDK:OK fsm: legality table + runtime rejection verified (LOG.FSM)",
+        "GDK:OK crime: wanted 0 -> 1, tick-stamped events (LOG.EVENTS-DETERMINISTIC)",
+        "GDK:OK playtest: full loop delivered at tick 6657, score 500 (QA.PLAYTEST-SCRIPT)"
+      ],
+      "message": "headless node suite green (determinism, sanity, FSM, playtest)"
+    },
+    {
+      "ruleId": "QA.TESTS-PASS",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": [
+        "GDK:OK determinism: 600 seeded ticks, two runs exactly identical (PHY.DETERMINISM)",
+        "GDK:OK clamp: sustained max input caps at 14.000 <= 14 (PHY.SANITY-SIM)",
+        "GDK:OK collision: 900 ticks of reckless driving, no building tunneling",
+        "GDK:OK fsm: legality table + runtime rejection verified (LOG.FSM)",
+        "GDK:OK crime: wanted 0 -> 1, tick-stamped events (LOG.EVENTS-DETERMINISTIC)",
+        "GDK:OK playtest: full loop delivered at tick 6657, score 500 (QA.PLAYTEST-SCRIPT)"
+      ],
+      "message": "headless node suite green (determinism, sanity, FSM, playtest)"
+    },
+    {
+      "ruleId": "QA.PLAYTEST-SCRIPT",
+      "status": "pass",
+      "severity": "major",
+      "evidence": [
+        "GDK:OK determinism: 600 seeded ticks, two runs exactly identical (PHY.DETERMINISM)",
+        "GDK:OK clamp: sustained max input caps at 14.000 <= 14 (PHY.SANITY-SIM)",
+        "GDK:OK collision: 900 ticks of reckless driving, no building tunneling",
+        "GDK:OK fsm: legality table + runtime rejection verified (LOG.FSM)",
+        "GDK:OK crime: wanted 0 -> 1, tick-stamped events (LOG.EVENTS-DETERMINISTIC)",
+        "GDK:OK playtest: full loop delivered at tick 6657, score 500 (QA.PLAYTEST-SCRIPT)"
+      ],
+      "message": "headless node suite green (determinism, sanity, FSM, playtest)"
+    }
+  ],
+  "passed": true,
+  "blockersFailed": [],
+  "majorsFailed": [],
+  "skipped": [
+    "NET.SRV-AUTH",
+    "NET.TICK-FIXED",
+    "NET.INPUT-VALIDATE",
+    "NET.SNAPSHOT-INTERP",
+    "NET.PREDICT-RECONCILE",
+    "NET.LAGCOMP",
+    "SEC.RATE-LIMIT",
+    "SEC.SANITIZE",
+    "SEC.TRANSPORT"
+  ]
+}
