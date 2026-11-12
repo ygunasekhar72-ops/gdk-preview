@@ -171,8 +171,9 @@ export function createSim(seed: number = SEED): SimState {
     }
   }
 
-  // Player spawns on a road.
+  // Player spawns on a road, facing ALONG it (not into the facing wall).
   s.player.pos = randRoadPoint(s);
+  s.player.heading = (s.player.pos.x % CELL_SIZE) < ROAD_W ? Math.PI / 2 : 0;
 
   // Parked cars along roads.
   for (let i = 0; i < 10; i++) {
@@ -414,12 +415,23 @@ export function step(s: SimState, rawInput: SimInput, dt: number = STEP_DT): voi
   if (playerCar !== null) {
     stepDriving(s, playerCar, input, dt, true);
   } else {
-    s.player.pos.x += input.move.x * MAX_WALK_SPEED_MPS * dt;
-    s.player.pos.y += input.move.y * MAX_WALK_SPEED_MPS * dt;
+    // walker wall-slide: decompose the step into wall-normal + tangent and
+    // keep the tangent when the normal component hits a building
+    const vx0 = input.move.x * MAX_WALK_SPEED_MPS * dt;
+    const vy0 = input.move.y * MAX_WALK_SPEED_MPS * dt;
+    s.player.pos.x += vx0;
+    s.player.pos.y += vy0;
+    const col = collideBuildings(s, s.player.pos, 0.9);
+    if (col.impact > 0) {
+      const into = vx0 * col.nx + vy0 * col.ny;
+      if (into < 0) {
+        s.player.pos.x -= col.nx * into;
+        s.player.pos.y -= col.ny * into;
+      }
+    }
     if (Math.hypot(input.move.x, input.move.y) > 0.01) {
       s.player.heading = Math.atan2(input.move.y, input.move.x);
     }
-    collideBuildings(s, s.player.pos, 0.9);
   }
 
   // --- pedestrians ---

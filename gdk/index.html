@@ -3,16 +3,39 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MINI GTA — GDK build</title>
+<title>MINI GTA 3D — GDK build</title>
 <style>
-  html, body { margin: 0; padding: 0; background: #101418; height: 100%; overflow: hidden; }
-  #game { display: block; margin: 0 auto; image-rendering: auto; background: #101418; }
-  #fps { position: fixed; top: 8px; left: 12px; color: #7ee787; font: 12px monospace; }
+  html, body { margin: 0; padding: 0; background: #0d1117; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; }
+  #game { display: block; width: 100vw; height: 100vh; }
+  .hud { position: fixed; color: #e6edf3; font: bold 20px monospace; text-shadow: 0 1px 3px #000; pointer-events: none; }
+  #cash { top: 14px; left: 18px; color: #7ee787; }
+  #stars { top: 14px; right: 18px; color: #ff5f5f; font-size: 24px; }
+  #objective { bottom: 16px; left: 50%; transform: translateX(-50%); color: #e8d8a0; font-size: 15px; }
+  #speed { bottom: 44px; left: 50%; transform: translateX(-50%); color: #cfd8e3; font-size: 15px; }
+  #fps { top: 44px; left: 18px; color: #8b949e; font: 11px monospace; }
+  #minimap { position: fixed; bottom: 16px; right: 16px; border: 1px solid #3a3f45; border-radius: 6px; }
+  #busted { position: fixed; inset: 0; background: rgba(10, 10, 14, 0.55); display: none; flex-direction: column; align-items: center; justify-content: center; color: #e05555; font: bold 72px monospace; }
+  #busted small { color: #cfcfcf; font: 18px monospace; margin-top: 8px; }
+  #hint { position: fixed; top: 44px; right: 18px; color: #8b949e; font: 11px monospace; text-align: right; }
 </style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "./lib/three.module.min.js"
+  }
+}
+</script>
 </head>
 <body>
-<canvas id="game" width="1280" height="720"></canvas>
-<div id="fps"></div>
+<canvas id="game"></canvas>
+<div id="cash" class="hud">$0</div>
+<div id="stars" class="hud">☆☆☆☆☆</div>
+<div id="fps" class="hud"></div>
+<div id="hint" class="hud">WASD move · E enter/exit car · Space handbrake</div>
+<div id="objective" class="hud">reach the yellow beacon</div>
+<div id="speed" class="hud"></div>
+<canvas id="minimap" width="160" height="160"></canvas>
+<div id="busted">BUSTED<small>respawning...</small></div>
 <script type="module" src="./dist/main.js"></script>
 </body>
 </html>

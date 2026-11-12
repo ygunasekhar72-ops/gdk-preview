@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "mimosa-hook-status/v1",
+  "recordedAt": "2026-11-12T18:17:07.917Z",
+  "sessionId": "sess_371309bf-f35a-4967-af2e-4a6b7abfc88d",
+  "event": "PostToolUse",
+  "toolName": "Edit",
+  "file": "C:\\Users\\Y Venkatesulu\\.zcode\\workspace\\draft-452411a6-92e0-48d0-b470-4f18af4460fb\\gdk\\README.md",
+  "outcome": "clear",
+  "coverage": "complete",
+  "findingCount": 0,
+  "durationMs": 8,
+  "hostState": "hook_complete",
+  "reportHint": ".mimosa/reports/"
+}

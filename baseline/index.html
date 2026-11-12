@@ -1,16 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title>MINI GTA — top-down canvas demo</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="color-scheme" content="dark"/>
+<title>Sunset City — mini GTA 3D</title>
 <style>
-  html, body { margin: 0; padding: 0; background: #101014; overflow: hidden; }
-  #wrap { display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; }
-  canvas { background: #000; box-shadow: 0 0 60px rgba(0,0,0,0.9); }
+  html,body{margin:0;height:100%;overflow:hidden;background:#101014;font-family:"Segoe UI",system-ui,-apple-system,sans-serif;}
+  #game{position:fixed;inset:0;display:block;}
+  .hud{position:fixed;z-index:5;color:#fff;pointer-events:none;user-select:none;text-shadow:0 2px 4px rgba(0,0,0,.85);}
+  #cash{top:14px;left:18px;font-size:28px;font-weight:800;color:#9fe08c;letter-spacing:1px;}
+  #stars{top:52px;left:18px;font-size:24px;letter-spacing:3px;color:#43464e;}
+  #stars .lit{color:#ffd24a;text-shadow:0 0 10px rgba(255,180,40,.75);}
+  #stars.hot{animation:starPulse 1s infinite;}
+  @keyframes starPulse{0%,100%{opacity:1}50%{opacity:.55}}
+  #objective{top:14px;left:50%;transform:translateX(-50%);font-size:14px;font-weight:600;letter-spacing:2px;background:rgba(8,10,14,.5);border:1px solid rgba(255,255,255,.14);padding:7px 16px;border-radius:6px;white-space:nowrap;}
+  #speed{right:224px;bottom:22px;font-size:32px;font-weight:800;letter-spacing:1px;display:none;}
+  #speed small{font-size:14px;font-weight:600;opacity:.75;}
+  #hint{bottom:22px;left:50%;transform:translateX(-50%);font-size:14px;letter-spacing:1px;background:rgba(8,10,14,.5);padding:6px 14px;border-radius:6px;border:1px solid rgba(255,255,255,.12);opacity:0;transition:opacity .25s;white-space:nowrap;}
+  #toast{top:110px;left:50%;transform:translateX(-50%);font-size:24px;font-weight:800;letter-spacing:2px;color:#ffe27a;opacity:0;white-space:nowrap;}
+  #toast.show{animation:toastIn 2.2s ease forwards;}
+  @keyframes toastIn{0%{opacity:0;transform:translateX(-50%) scale(.85)}12%{opacity:1;transform:translateX(-50%) scale(1.05)}20%{transform:translateX(-50%) scale(1)}75%{opacity:1}100%{opacity:0}}
+  #minimap{position:fixed;top:14px;right:14px;z-index:5;border:2px solid rgba(255,255,255,.45);border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.5);}
+  #vignette{position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at center,transparent 58%,rgba(8,6,10,.45) 100%);}
+  #busted{position:fixed;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(12,14,30,.55);opacity:0;pointer-events:none;transition:opacity .3s;}
+  #busted h1{margin:0;font-size:84px;letter-spacing:14px;color:#fff;text-shadow:0 0 30px #4aa3ff,0 4px 0 rgba(0,0,0,.6);}
+  #busted p{color:#cfe0ff;font-size:18px;letter-spacing:2px;margin-top:8px;}
+  #start{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(10,14,26,.93),rgba(32,16,8,.9));color:#fff;text-align:center;cursor:pointer;}
+  #start h1{font-size:62px;margin:0;letter-spacing:10px;color:#ffd9a0;text-shadow:0 0 34px rgba(255,160,60,.55),0 4px 0 rgba(0,0,0,.5);}
+  #start h2{font-size:14px;font-weight:500;letter-spacing:4px;color:#e8c9a0;opacity:.85;margin:12px 0 36px;}
+  #start .keys{display:grid;grid-template-columns:auto auto;gap:8px 18px;font-size:15px;letter-spacing:1px;margin-bottom:38px;}
+  #start .keys b{color:#ffcf7a;text-align:right;font-weight:700;}
+  #start .keys span{text-align:left;color:#dfe3ea;}
+  #start .go{font-size:16px;letter-spacing:3px;color:#fff;background:rgba(255,180,60,.16);border:1px solid rgba(255,200,110,.55);padding:10px 26px;border-radius:8px;animation:starPulse 1.6s infinite;}
+  #err{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#5c1010;color:#fff;font:13px monospace;padding:8px 12px;display:none;white-space:pre-wrap;}
 </style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}
+</script>
 </head>
 <body>
-<div id="wrap"><canvas id="game" width="1280" height="720"></canvas></div>
-<script src="game.js"></script>
+<div id="cash" class="hud">$0</div>
+<div id="stars" class="hud"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+<div id="objective" class="hud">REACH THE BEACON</div>
+<div id="speed" class="hud"><span id="speedVal">0</span> <small>KM/H</small></div>
+<div id="hint" class="hud"></div>
+<div id="toast" class="hud"></div>
+<canvas id="minimap" width="190" height="190"></canvas>
+<div id="vignette"></div>
+<div id="busted"><h1>BUSTED</h1><p id="bustedSub">Fine paid: $300</p></div>
+<div id="start">
+  <h1>SUNSET CITY</h1>
+  <h2>A MINI-GTA — REAL 3D · CHASE CAM · COPS · MISSIONS</h2>
+  <div class="keys">
+    <b>W A S D</b><span>walk / drive</span>
+    <b>SHIFT</b><span>sprint (on foot)</span>
+    <b>E</b><span>enter / exit car</span>
+    <b>SPACE</b><span>handbrake (drift)</span>
+    <b>R</b><span>reset car to road</span>
+  </div>
+  <div class="go">CLICK OR PRESS ANY KEY</div>
+</div>
+<div id="err"></div>
+<script type="module" src="./game.js"></script>
 </body>
 </html>

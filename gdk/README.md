@@ -1,10 +1,15 @@
-# MINI GTA — GDK build
+# MINI GTA 3D — GDK build
 
-The same game design as [baseline-gta-web](../../baseline-gta-web/) (top-down
-open-world driving: walk, steal cars, evade police, deliver checkpoints), but
-**built through the GDK pipeline**: a declared spec, a generated team plan,
-pillar playbooks as the working rules, and quality gates that reject the build
-until they pass.
+The same game design as [baseline-gta-3d](../baseline-gta-3d/) (open-world
+driving: walk, steal cars, evade police, deliver checkpoints) in **real 3D**
+(Three.js: third-person chase camera, 3D city with shadows and lit windows,
+procedural low-poly vehicles and pedestrians), but **built through the GDK
+pipeline**: a declared spec, a generated team plan, pillar playbooks as the
+working rules, and quality gates that reject the build until they pass.
+
+The deterministic sim stays a pure 2D-plane module (headless-testable); the
+scene module documents the one conversion point to three.js's y-up world
+(PHY.UNIT-CONSIST).
 
 ## The GDK process this build went through
 
@@ -38,10 +43,11 @@ until they pass.
 ```
 src/sim/sim.ts          GDK:AUTHORITATIVE — pure deterministic sim (tick 60 Hz, seeded RNG)
 src/game/game_state.ts  explicit FSM (FREE_ROAM / MISSION_ACTIVE / BUSTED)
-src/render/renderer.ts  reads state, draws it — never decides it
-src/main.ts             fixed-timestep accumulator loop + input wiring
+src/render/scene3d.ts   Three.js scene: reads state, draws it — never decides it
+src/main.ts             fixed-timestep accumulator loop + input wiring + HUD
 tests/gdk_sim.test.ts   GDK:TEST — determinism, clamp, collision, FSM, crime, playtest
 gate-reports/           the audit trail: team plan + per-phase gate runs
+lib/three.module.min.js self-hosted Three.js r170 (declared dependency)
 ```
 
 ## Run
